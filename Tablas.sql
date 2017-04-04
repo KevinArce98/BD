@@ -39,7 +39,7 @@ codigo VARCHAR NOT NULL,
 montoInicial DOUBLE PRECISION NOT NULL
 );
 
-ALTER TABLE caja ADD CONSTRAINT pk_caja PRIMARY KEY (id);
+ALTER TABLE caja ADD CONSTRAINT pk_caja PRIMARY KEY (codigo);
 
 CREATE TABLE entrada(
 id serial NOT NULL,
@@ -168,3 +168,48 @@ telefono INTEGER NOT NULL,
   );
   ALTER TABLE venta ADD CONSTRAINT pk_idVenta PRIMARY KEY(id);
 
+---------------FOREIGN KEY---------------------
+
+set search_path = clientes;
+
+ALTER TABLE clienteDebe ADD CONSTRAINT fk_cliente FOREIGN KEY (idCliente)
+REFERENCES cliente (id);
+
+set search_path = usuarios;
+
+ALTER TABLE estadoCuenta ADD CONSTRAINT fk_cliente FOREIGN KEY (idCliente)
+REFERENCES clientes.cliente (id);
+
+ALTER TABLE detalleVenta ADD CONSTRAINT fk_caja FOREIGN KEY (codigoCaja)
+REFERENCES admin.caja (codigo);
+
+ALTER TABLE usuario ADD CONSTRAINT fk_puesto FOREIGN KEY (idPuestos)
+REFERENCES puesto (id);
+
+ALTER TABLE ventaContado ADD CONSTRAINT fk_ticket FOREIGN KEY (idTicket)
+REFERENCES admin.ticket (id);
+
+ALTER TABLE ventaContado ADD CONSTRAINT fk_caja FOREIGN KEY (codigoCaja)
+REFERENCES admin.caja (codigo);
+
+ALTER TABLE ventaCredito ADD CONSTRAINT fk_ticket FOREIGN KEY (idTicket)
+REFERENCES admin.ticket (id);
+
+ALTER TABLE ventaCredito ADD CONSTRAINT fk_cliente FOREIGN KEY (idCliente)
+REFERENCES clientes.cliente (id);
+
+ALTER TABLE ventaCredito ADD CONSTRAINT fk_usuario FOREIGN KEY (idUsuario)
+REFERENCES usuarios.usuario (id);
+
+ALTER TABLE ventaCredito ADD CONSTRAINT fk_caja FOREIGN KEY (codigoCaja)
+REFERENCES admin.caja (codigo);
+
+ALTER TABLE venta ADD CONSTRAINT fk_usuario FOREIGN KEY (idUsuario)
+REFERENCES usuarios.usuario (id);
+
+ALTER TABLE venta ADD CONSTRAINT fk_detalleVenta FOREIGN KEY (idDetalleVenta)
+REFERENCES detalleVenta (id);
+
+ALTER TABLE venta ADD CONSTRAINT fk_caja FOREIGN KEY (codigo_caja)
+REFERENCES admin.caja (codigo);
+----------------------------------------
