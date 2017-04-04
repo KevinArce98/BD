@@ -1,15 +1,15 @@
-cliente(id, nombre, apellido1, apellido2, telefono, montoLimite)---------
-clienteDebe(id, id_cliente, montoDebe)
+cliente(id, nombre, apellido1, apellido2, telefono, montoLimite,direccion)-----------
+clienteDebe(id, id_cliente, montoDebe, fechaLimiteCancelacion)
 estadoCuenta(id, id_cliente, saldoAnterior, abono, saldo_actual, fecha_hora)------
 cajas(codigo, montoIncial)
 detalleVenta(id, descripcion, precio, cantidad, importe, id_linea, codigo_caja)----
 entradas(id, descripcion, monto fecha_hora)
 salidas(id, descripcion, monto fecha_hora)
-usuarios(id, usuario, clave, nombre, apellido)
-permisos(id_usuario,......)
+usuarios(id, usuario, clave, nombre, apellido,genero ,telefono, idPuestos)------------
+puestos(id,puesto)
 producto(codigo, descripcion, costoBase, precioVenta, cantidad, enStock)------
 ticket(id, nombre, localidad, direccion, propietario, telefono, mensajefinal, ultimalinea)--------
 ventaContado(id, idTicket, monto, pagaCon, suVuelto, codigoCaja,)-------
-ventaCredito(id, idTicket, monto, idCliente)
-ventas(id, fecha_hora, tipoPago, idUsuario, codigo_caja)
-proveedor(cod_proveedor, nombre, direccion, telefono)
+ventaCredito(id, idTicket, monto, idCliente,idUsuario,codigoCaja)-------
+ventas(id, fecha_hora, tipoPago, idUsuario, codigo_caja, idDetalleVenta)-----------
+proveedor(cod_proveedor, nombre, direccion, telefono, fechaPedido,compañia)--------
