@@ -1,15 +1,18 @@
-cliente(id, nombre, apellido1, apellido2, telefono, montoLimite,direccion)-----------
-clienteDebe(id, id_cliente, montoDebe, fechaLimiteCancelacion)
-estadoCuenta(id, id_cliente, saldoAnterior, abono, saldo_actual, fecha_hora)------
-cajas(codigo, montoIncial)
-detalleVenta(id, descripcion, precio, cantidad, importe, id_linea, codigo_caja)----
-entradas(id, descripcion, monto fecha_hora)
-salidas(id, descripcion, monto fecha_hora)
-usuarios(id, usuario, clave, nombre, apellido,genero ,telefono, idPuestos)------------
-puestos(id,puesto)
-producto(codigo, descripcion, costoBase, precioVenta, cantidad, enStock)------
-ticket(id, nombre, localidad, direccion, propietario, telefono, mensajefinal, ultimalinea)--------
-ventaContado(id, idTicket, monto, pagaCon, suVuelto, codigoCaja,)-------
-ventaCredito(id, idTicket, monto, idCliente,idUsuario,codigoCaja)-------
-ventas(id, fecha_hora, tipoPago, idUsuario, codigo_caja, idDetalleVenta)-----------
-proveedor(cod_proveedor, nombre, direccion, telefono, fechaPedido,compañia)--------
+Esquemas 
+Cliente = C - Usuarios = U - Admin= A
+
+cliente(id, nombre, apellido1, apellido2, telefono, montoLimite,direccion)--C
+clienteDebe(id, id_cliente, montoDebe, fechaLimiteCancelacion)--A
+estadoCuenta(id, id_cliente, saldoAnterior, abono, saldo_actual, fecha_hora)--U
+caja(codigo, montoIncial)--A
+detalleVenta(id, descripcion, precio, cantidad, impuesto, codigo_caja)--U
+entrada(id, descripcion, monto fecha_hora)--A
+salida(id, descripcion, monto fecha_hora)--A
+usuario(id, usuario, clave, nombre, apellido,genero ,telefono, idPuestos)--U
+puesto(id,puesto)--U
+producto(codigo, descripcion, costoBase, precioVenta, cantidad, enStock)--A
+ticket(id, nombre, localidad, direccion, propietario, telefono, mensajefinal, ultimalinea)--A
+ventaContado(id, idTicket, monto, pagaCon, suVuelto, codigoCaja)--U
+ventaCredito(id, idTicket, monto, idCliente,idUsuario,codigoCaja)--U
+venta(id, fecha_hora, tipoPago, idUsuario, codigo_caja, idDetalleVenta)--U
+proveedor(codigo, nombre, direccion, telefono, fechaPedido,compañia)--A
