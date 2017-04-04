@@ -2,7 +2,7 @@ Esquemas
 Cliente = C - Usuarios = U - Admin= A
 
 cliente(id, nombre, apellido1, apellido2, telefono, montoLimite,direccion)--C
-clienteDebe(id, id_cliente, montoDebe, fechaLimiteCancelacion)--A
+clienteDebe(id, id_cliente, montoDebe, fechaLimiteCancelacion)--C
 estadoCuenta(id, id_cliente, saldoAnterior, abono, saldo_actual, fecha_hora)--U
 caja(codigo, montoIncial)--A
 detalleVenta(id, descripcion, precio, cantidad, impuesto, codigo_caja)--U
