@@ -39,3 +39,35 @@ CREATE INDEX index_cliente ON clientes.cliente (nombre,telefono);
 CREATE INDEX index_detalle_venta ON usuarios.detalleventa ( codigocaja, cantidad,precio);
 
 CREATE INDEX index_cliente_debe ON clientes.clientedebe (idcliente,montodebe,fechalimitecancelar);
+
+
+                             ------------------
+                             --    SELECTS   --
+                             ------------------
+
+
+SELECT descripcion,cantidad FROM usuarios.detalleventa WHERE precio > 1000;
+
+SELECT nombre,apellido1 FROM clientes.cliente WHERE montolimite BETWEEN 5000 and 20000;
+
+SELECT codigo,descripcion FROM  admin.producto WHERE  cantidad = 10;
+
+
+SELECT codigo,descripcion FROM  admin.producto WHERE  producto.costobase = 1000 AND producto.costobase = 1500;
+
+
+SELECT codigo FROM admin.caja WHERE caja.montoinicial = 50000;
+
+
+SELECT  codigo, descripcion FROM admin.producto WHERE producto.codigo LIKE '%12%';
+
+SELECT *FROM clientes.cliente WHERE nombre LIKE 'Jo%';
+
+SELECT codigo, nombre,direccion , telefono FROM admin.proveedor WHERE compannia ILIKE 'J%';
+
+SELECT codigo ,descripcion FROM admin.producto WHERE producto.costobase < 1000 OR producto.costobase >2000;
+
+SELECT  ticket.nombre, ticket.localidad, ticket.propietario, ticket.telefono, ventacontado.monto, ventacontado.pagacon, 
+  ventacontado.suvuelto, ventacontado.codigocaja FROM admin.ticket, usuarios.ventacontado
+WHERE ticket.id = ventacontado.idticket;
+
