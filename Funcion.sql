@@ -1,4 +1,6 @@
-﻿--------------------funciones Cliente-------------------------------
+﻿
+set search_path = clientes;
+--------------------funciones Cliente-------------------------------
 CREATE OR REPLACE FUNCTION insertarCliente(nombre VARCHAR, apellido1 VARCHAR, apellido2 VARCHAR, telefono VARCHAR, montolimite DOUBLE PRECISION, direccion VARCHAR)  RETURNS INTEGER AS 
 $clienteTrigger$
 DECLARE ID INTEGER;
@@ -127,7 +129,7 @@ CREATE TRIGGER clienteDebeTrigger AFTER INSERT OR UPDATE
 --DROP FUNCTION insertClienteDebe(pIdCliente INT, monto DOUBLE PRECISION, fecha TIMESTAMP);
 --DROP FUNCTION updateClienteDebe(pIdCliente INT, monto DOUBLE PRECISION, fecha TIMESTAMP, pId INT); 
 --DROP FUNCTION deleteCliente(int);
-
+set search_path = admin;
 --------------------funciones caja-------------------------------
 CREATE OR REPLACE FUNCTION insertCaja(pCodigo VARCHAR, monto DOUBLE PRECISION)  RETURNS INTEGER AS 
 $cajaTrigger$
@@ -203,10 +205,10 @@ VALUES (pDescripcion, pMonto, fecha);
 ID = (SELECT currval('admin.entrada_id_seq'));
 RETURN ID;
 END
-$entradaTriggerv$ language plpgsql;
+$entradaTrigger$ language plpgsql;
 
 CREATE OR REPLACE FUNCTION updateEntrada(pDescripcion VARCHAR, pMonto DOUBLE PRECISION, fecha TIMESTAMP, pId INT)  RETURNS VOID AS 
-$entradaTriggerv$
+$entradaTrigger$
 BEGIN
 UPDATE admin.entrada SET "descripcion" = pDescripcion, "monto" = pMonto, "fechahora" = fecha
  WHERE "id" = pId ;
@@ -522,6 +524,7 @@ CREATE TRIGGER ticketTrigger AFTER INSERT OR UPDATE
 --DROP FUNCTION updateTicket(pNombre VARCHAR, pLocalidad VARCHAR, pDireccion VARCHAR, pPropietario VARCHAR, pTelefono integer, mensaje VARCHAR, pUltimalinea VARCHAR, pId INT); 
 --DROP FUNCTION deleteTicket(int);
 
+set search_path = usuarios;
 -------------------funciones DetalleVenta-------------------------------
 CREATE OR REPLACE FUNCTION insertDetalleVenta(pDescripcion VARCHAR, pPrecio VARCHAR, pCantidad integer, pImpuestos double precision, pCodigocaja VARCHAR)  RETURNS INTEGER AS 
 $detalleventaTrigger$
@@ -535,7 +538,7 @@ END
 $detalleventaTrigger$ language plpgsql;
 
 CREATE OR REPLACE FUNCTION updateDetalleVenta(pDescripcion VARCHAR, pPrecio VARCHAR, pCantidad integer, pImpuestos double precision, pCodigocaja VARCHAR, pId INT)  RETURNS VOID AS 
-$detalleventaTrigger
+$detalleventaTrigger$
 BEGIN
 UPDATE usuarios.detalleventa SET "descripcion" = pDescripcion, "precio" = pPrecio, "cantidad" = pCantidad, "impuestos" = pImpuestos, "codigocaja"= pCodigocaja
  WHERE "id" = pId ;
@@ -600,7 +603,7 @@ END
 $estadocuentaTrigger$ language plpgsql;
 
 CREATE OR REPLACE FUNCTION updateEstadoCuenta(pIdcliente integer, pSaldoanterior double precision, pAbono double precision, pSaldoactual double precision, pFechahora timestamp, pId INT)  RETURNS VOID AS 
-$estadocuentaTrigger
+$estadocuentaTrigger$
 BEGIN
 UPDATE usuarios.estadocuenta SET "idcliente" = pIdcliente, "saldoanterior" = pSaldoanterior, "abono" = pAbono, "saldoactual" = pSaldoactual, "fechahora"= pFechahora
  WHERE "id" = pId ;

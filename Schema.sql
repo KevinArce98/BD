@@ -1,3 +1,0 @@
-﻿CREATE SCHEMA admin;
-CREATE SCHEMA usuarios;
-CREATE SCHEMA clientes;
