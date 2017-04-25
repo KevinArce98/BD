@@ -3,7 +3,13 @@ CREATE USER administrador;
 ALTER ROLE administrador WITH SUPERUSER CREATEROLE;
 ALTER ROLE administrador WITH PASSWORD '12345';
 
+CREATE USER normal;
+ALTER ROLE normal WITH SUPERUSER CREATEROLE;
+ALTER ROLE normal WITH PASSWORD '12345';
 
+CREATE USER respaldo;
+ALTER ROLE respaldo WITH REPLICATION CREATEROLE;
+ALTER ROLE respaldo WITH PASSWORD '12345';
 -----------------------------------------------
 ------------Dicionario de Datos----------------
 
