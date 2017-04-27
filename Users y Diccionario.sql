@@ -13,7 +13,7 @@ ALTER ROLE respaldo WITH PASSWORD '12345';
 -----------------------------------------------
 ------------Dicionario de Datos----------------
 
-SELECT * FROM pg_stat_user_indexes; --Mostrar Indices
+SELECT relname, indexrelname FROM pg_stat_user_indexes WHERE indexrelname !~~ '%pk%'; --Mostrar Indices
 
 SELECT proname FROM pg_proc WHERE prolang  = 11859 ORDER BY proname --Mostrar Funciones
 

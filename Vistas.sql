@@ -34,7 +34,7 @@ FROM usuarios.detalleventa JOIN admin.caja ON usuarios.detalleventa.codigocaja =
 set search_path = usuarios;
 CREATE INDEX index_estado_cuenta ON usuarios.estadocuenta (idcliente,saldoanterior,abono,saldoactual);
 
-CREATE UNIQUE INDEX index_venta_contado ON usuarios.ventacontado(idticket);
+CREATE UNIQUE INDEX index_venta_contado ON usuarios.ventacontado(id);
 
 CREATE INDEX index_detalle_venta ON usuarios.detalleventa ( codigocaja, cantidad,precio);
 

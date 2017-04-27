@@ -1,4 +1,219 @@
-﻿
+﻿-------Esquemas-----
+CREATE SCHEMA admin;
+CREATE SCHEMA usuarios;
+CREATE SCHEMA clientes;
+
+----Cambio Esquema-----
+SET search_path = clientes;
+---Tablas Esquema Cliente---
+CREATE TABLE cliente
+(
+ id serial NOT NULL,
+ nombre VARCHAR NOT NULL,
+ apellido1 VARCHAR NOT NULL,
+ apellido2 VARCHAR NOT NULL,
+ telefono VARCHAR NOT NULL,
+ montoLimite DOUBLE PRECISION NOT NULL,
+ direccion VARCHAR NOT NULL
+);
+
+ALTER TABLE cliente ADD CONSTRAINT pk_cliente PRIMARY KEY (id);
+
+CREATE TABLE clienteDebe
+(
+ id serial NOT NULL,
+ idCliente INT NOT NULL,
+ montoDebe DOUBLE PRECISION NOT NULL,
+ fechaLimiteCancelar TIMESTAMP NOT NULL
+);
+
+ALTER TABLE clienteDebe ADD CONSTRAINT pk_clienteDebe PRIMARY KEY (id);
+
+----Cambio Esquema-----
+SET search_path = admin;
+---Tablas Esquema Admin---
+
+CREATE TABLE caja(
+id serial NOT NULL,
+codigo VARCHAR NOT NULL,
+montoInicial DOUBLE PRECISION NOT NULL
+);
+
+ALTER TABLE caja ADD CONSTRAINT pk_caja PRIMARY KEY (codigo);
+
+CREATE TABLE entrada(
+id serial NOT NULL,
+descripcion VARCHAR NOT NULL,
+monto DOUBLE PRECISION NOT NULL,
+fechaHora TIMESTAMP NOT NULL
+);
+
+ALTER TABLE entrada ADD CONSTRAINT pk_entrada PRIMARY KEY (id);
+
+CREATE TABLE salida(
+id serial NOT NULL, 
+descripcion VARCHAR NOT NULL,
+monto DOUBLE PRECISION NOT NULL,
+fechaHora TIMESTAMP NOT NULL
+);
+
+ALTER TABLE salida ADD CONSTRAINT pk_salida PRIMARY KEY (id);
+
+ CREATE TABLE  producto(
+ codigo VARCHAR NOT NULL, 
+ descripcion VARCHAR NOT NULL, 
+ costoBase DOUBLE PRECISION NOT NULL, 
+ precioVenta DOUBLE PRECISION NOT NULL, 
+ cantidad DOUBLE PRECISION NOT NULL, 
+ enStock INTEGER NOT NULL
+ );
+ ALTER TABLE producto ADD CONSTRAINT pk_codigoProducto PRIMARY KEY(codigo);
+
+  CREATE TABLE ticket(
+ id SERIAL NOT NULL, 
+ nombre VARCHAR NOT NULL, 
+ localidad VARCHAR NOT NULL, 
+ direccion VARCHAR NOT NULL, 
+ propietario VARCHAR NOT NULL, 
+ telefono INTEGER NOT NULL, 
+ mensajefinal VARCHAR NOT NULL, 
+ ultimalinea VARCHAR NOT NULL
+ );
+ ALTER TABLE ticket ADD CONSTRAINT pk_idTicket PRIMARY KEY(id);
+ 
+  CREATE TABLE  proveedor(
+ codigo VARCHAR NOT NULL, 
+ nombre VARCHAR NOT NULL, 
+ direccion VARCHAR NOT NULL, 
+ telefono INTEGER NOT NULL, 
+ fechaPedido TIMESTAMP NOT NULL,
+ compannia VARCHAR NOT NULL 
+ );
+ ALTER TABLE proveedor ADD CONSTRAINT pk_codProveedor PRIMARY KEY (codigo);
+ 
+----Cambio Esquema-----
+SET search_path = usuarios;
+---Tablas Esquema Usuarios---
+
+CREATE TABLE estadoCuenta(
+id serial NOT NULL,
+idCliente INT NOT NULL,
+saldoAnterior DOUBLE PRECISION NOT NULL,
+abono DOUBLE PRECISION NOT NULL,
+saldoActual DOUBLE PRECISION NOT NULL,
+fechaHora TIMESTAMP NOT NULL
+);
+
+ALTER TABLE estadoCuenta ADD CONSTRAINT pk_estadoCuenta PRIMARY KEY (id);
+
+
+CREATE TABLE detalleVenta(
+id serial NOT NULL,
+descripcion VARCHAR NOT NULL,
+precio DOUBLE PRECISION NOT NULL,
+cantidad INT NOT NULL,
+impuestos DOUBLE PRECISION NOT NULL,
+codigoCaja VARCHAR NOT NULL
+);
+
+ALTER TABLE detalleVenta ADD CONSTRAINT pk_detalleVenta PRIMARY KEY (id);
+
+
+CREATE TABLE usuario(
+id serial NOT NULL , 
+usuario VARCHAR NOT NULL,
+nombre VARCHAR NOT NULL , 
+apellido VARCHAR NOT NULL, 
+telefono INTEGER NOT NULL,
+ clave VARCHAR NOT NULL, 
+ idPuestos INTEGER NOT NULL
+ );
+ ALTER TABLE usuario ADD CONSTRAINT pk_idUsuario PRIMARY KEY(id);
+
+
+ CREATE TABLE puesto(
+ id SERIAL NOT NULL, 
+ puesto VARCHAR NOT NULL
+ );
+ ALTER TABLE puesto ADD CONSTRAINT pk_idPuesto PRIMARY KEY(id);
+
+ CREATE TABLE ventaContado(
+ id SERIAL NOT NULL, 
+ idTicket INTEGER NOT NULL, 
+ monto DOUBLE PRECISION NOT NULL, 
+ pagaCon DOUBLE PRECISION NOT NULL, 
+ suVuelto DOUBLE PRECISION NOT NULL, 
+ codigoCaja VARCHAR NOT NULL
+ );
+ ALTER TABLE ventaContado ADD CONSTRAINT pk_idVentaContado PRIMARY KEY(id);
+
+ CREATE TABLE ventaCredito(
+ id SERIAL NOT NULL, 
+ idTicket INTEGER NOT NULL, 
+ monto DOUBLE PRECISION NOT NULL, 
+ idCliente INTEGER NOT NULL,
+ idUsuario INTEGER NOT NULL,
+ codigoCaja VARCHAR NOT NULL
+ );
+ ALTER TABLE ventaCredito ADD CONSTRAINT pk_idVentaCredito PRIMARY KEY(id);
+
+
+  CREATE TABLE venta(
+  id SERIAL NOT NULL, 
+  fecha_hora TIMESTAMP NOT NULL, 
+  tipoPago VARCHAR NOT NULL, 
+  idUsuario INTEGER NOT NULL , 
+  codigo_caja VARCHAR NOT NULL, 
+  idDetalleVenta INTEGER NOT NULL
+  );
+  ALTER TABLE venta ADD CONSTRAINT pk_idVenta PRIMARY KEY(id);
+
+---------------FOREIGN KEY---------------------
+
+set search_path = clientes;
+
+ALTER TABLE clienteDebe ADD CONSTRAINT fk_cliente FOREIGN KEY (idCliente)
+REFERENCES cliente (id);
+
+set search_path = usuarios;
+
+ALTER TABLE estadoCuenta ADD CONSTRAINT fk_cliente FOREIGN KEY (idCliente)
+REFERENCES clientes.cliente (id);
+
+ALTER TABLE detalleVenta ADD CONSTRAINT fk_caja FOREIGN KEY (codigoCaja)
+REFERENCES admin.caja (codigo);
+
+ALTER TABLE usuario ADD CONSTRAINT fk_puesto FOREIGN KEY (idPuestos)
+REFERENCES puesto (id);
+
+ALTER TABLE ventaContado ADD CONSTRAINT fk_ticket FOREIGN KEY (idTicket)
+REFERENCES admin.ticket (id);
+
+ALTER TABLE ventaContado ADD CONSTRAINT fk_caja FOREIGN KEY (codigoCaja)
+REFERENCES admin.caja (codigo);
+
+ALTER TABLE ventaCredito ADD CONSTRAINT fk_ticket FOREIGN KEY (idTicket)
+REFERENCES admin.ticket (id);
+
+ALTER TABLE ventaCredito ADD CONSTRAINT fk_cliente FOREIGN KEY (idCliente)
+REFERENCES clientes.cliente (id);
+
+ALTER TABLE ventaCredito ADD CONSTRAINT fk_usuario FOREIGN KEY (idUsuario)
+REFERENCES usuarios.usuario (id);
+
+ALTER TABLE ventaCredito ADD CONSTRAINT fk_caja FOREIGN KEY (codigoCaja)
+REFERENCES admin.caja (codigo);
+
+ALTER TABLE venta ADD CONSTRAINT fk_usuario FOREIGN KEY (idUsuario)
+REFERENCES usuarios.usuario (id);
+
+ALTER TABLE venta ADD CONSTRAINT fk_detalleVenta FOREIGN KEY (idDetalleVenta)
+REFERENCES detalleVenta (id);
+
+ALTER TABLE venta ADD CONSTRAINT fk_caja FOREIGN KEY (codigo_caja)
+REFERENCES admin.caja (codigo);
+----------------------------------------
+
 set search_path = clientes;
 --------------------funciones Cliente-------------------------------
 CREATE OR REPLACE FUNCTION insertarCliente(nombre VARCHAR, apellido1 VARCHAR, apellido2 VARCHAR, telefono VARCHAR, montolimite DOUBLE PRECISION, direccion VARCHAR)  RETURNS INTEGER AS 
@@ -980,4 +1195,113 @@ CREATE TRIGGER ventacreditoTrigger AFTER INSERT OR UPDATE
 --DROP FUNCTION insertVentaCredito(pIdticket integer,pMonto double precision, pIdcliente integer, pIdusuario integer, pCodigocaja VARCHAR);
 --DROP FUNCTION updateVentaCredito(pIdticket integer,pMonto double precision, pIdcliente integer, pIdusuario integer, pCodigocaja VARCHAR, pId INT);
 --DROP FUNCTION deleteVentaCredito(int);
+
+
+
+--------------Users-----------------
+CREATE USER administrador;
+ALTER ROLE administrador WITH SUPERUSER CREATEROLE;
+ALTER ROLE administrador WITH PASSWORD '12345';
+
+CREATE USER normal;
+ALTER ROLE normal WITH SUPERUSER CREATEROLE;
+ALTER ROLE normal WITH PASSWORD '12345';
+
+CREATE USER respaldo;
+ALTER ROLE respaldo WITH REPLICATION CREATEROLE;
+ALTER ROLE respaldo WITH PASSWORD '12345';
+-----------------------------------------------
+                             ------------------
+                             --    INDEXES   --
+                             ------------------
+
+set search_path = usuarios;
+CREATE INDEX index_estado_cuenta ON usuarios.estadocuenta (idcliente,saldoanterior,abono,saldoactual);
+
+CREATE UNIQUE INDEX index_venta_contado ON usuarios.ventacontado(id);
+
+CREATE INDEX index_detalle_venta ON usuarios.detalleventa ( codigocaja, cantidad,precio);
+
+set search_path = clientes;
+
+CREATE INDEX index_cliente ON clientes.cliente (nombre,telefono);
+
+CREATE INDEX index_cliente_debe ON clientes.clientedebe (idcliente,montodebe,fechalimitecancelar);
+
+                             ------------------
+                             --    VISTAS    --
+                             ------------------
+set search_path = clientes;
+
+CREATE VIEW vista_debe_cliente AS
+SELECT cliente.id, nombre, apellido1, apellido2, telefono, montolimite, direccion,clientedebe.montodebe
+  FROM clientes.cliente INNER JOIN clientes.clientedebe ON clientedebe.idcliente = clientes.cliente.id
+  ORDER BY clientedebe.montodebe;
+
+CREATE VIEW cliente_estado_cuenta AS
+SELECT cliente.id, nombre, apellido1, apellido2, telefono,  direccion,usuarios.estadocuenta.saldoactual
+  FROM clientes.cliente INNER JOIN usuarios.estadocuenta ON cliente.id = usuarios.estadocuenta.idcliente;
+
+CREATE VIEW cliente_ventas_credito AS 
+SELECT cliente.id, nombre,apellido1,apellido2,telefono,usuarios.ventacredito.monto
+FROM clientes.cliente JOIN usuarios.ventacredito ON cliente.id = usuarios.ventacredito.idcliente;
+
+set search_path = usuarios;
+
+CREATE VIEW usuarios.venta_contado AS
+SELECT admin.ticket.id,nombre,localidad,direccion,propietario,telefono,
+mensajefinal,usuarios.ventacontado.monto, usuarios.ventacontado.codigocaja FROM admin.ticket JOIN usuarios.ventacontado ON
+admin.ticket.id = usuarios.ventacontado.idticket;
+
+CREATE VIEW usuarios_detalle_venta AS
+SELECT detalleventa.descripcion, precio, cantidad,detalleventa.impuestos,codigocaja,admin.caja.montoinicial
+FROM usuarios.detalleventa JOIN admin.caja ON usuarios.detalleventa.codigocaja = admin.caja.codigo;
+
+------------Dicionario de Datos----------------
+
+SELECT relname, indexrelname FROM pg_stat_user_indexes WHERE indexrelname !~~ '%pk%'; --Mostrar Indices
+
+SELECT proname FROM pg_proc WHERE prolang  = 11859 ORDER BY proname --Mostrar Funciones
+
+SELECT tgname FROM pg_trigger WHERE tgisinternal = false ORDER BY tgname; --Mostrar Tiggers
+
+SELECT table_schema AS schemas FROM information_schema.tables WHERE table_name !~~ '%pg%' AND table_schema !~~ '%schema%' GROUP BY schemas;--Mostrar esquemas
+
+
+SELECT table_name FROM information_schema.columns WHERE table_name !~~ '%pg%' AND table_name !~~ '%sql%' AND is_nullable = 'NO' GROUP BY table_name; -- Mostrar tablas
+SELECT table_name, column_name FROM information_schema.columns WHERE table_name !~~ '%pg%' AND table_name !~~ '%sql%' AND is_nullable = 'NO' 
+GROUP BY table_name, column_name ORDER BY table_name, column_name; -- Mostrar tablas y atributos
+
+SELECT table_name FROM INFORMATION_SCHEMA.views WHERE table_name !~~ '%pg%' AND table_name !~~ '%sql%' AND table_schema !~~ '%schema%' ORDER BY table_schema; -- Mostrar Vistas
+
+------------------------------------------------
+                             ------------------
+                             --    SELECTS   --
+                             ------------------
+
+
+SELECT descripcion,cantidad FROM usuarios.detalleventa WHERE precio > 1000;
+
+SELECT nombre,apellido1 FROM clientes.cliente WHERE montolimite BETWEEN 5000 and 20000;
+
+SELECT codigo,descripcion FROM  admin.producto WHERE  cantidad = 10;
+
+
+SELECT codigo,descripcion FROM  admin.producto WHERE  producto.costobase = 1000 AND producto.costobase = 1500;
+
+
+SELECT codigo FROM admin.caja WHERE caja.montoinicial >= 50000;
+
+
+SELECT  codigo, descripcion FROM admin.producto WHERE producto.codigo LIKE '%12%';
+
+SELECT * FROM clientes.cliente WHERE nombre LIKE 'Jo%';
+
+SELECT codigo, nombre,direccion , telefono FROM admin.proveedor WHERE compannia ILIKE 'A%';
+
+SELECT codigo ,descripcion FROM admin.producto WHERE producto.costobase < 1000 OR producto.costobase >2000;
+
+SELECT  ticket.nombre, ticket.localidad, ticket.propietario, ticket.telefono, ventacontado.monto, ventacontado.pagacon, 
+  ventacontado.suvuelto, ventacontado.codigocaja FROM admin.ticket, usuarios.ventacontado
+WHERE ticket.id = ventacontado.idticket;
 
